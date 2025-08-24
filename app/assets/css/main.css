@@ -1,0 +1,48 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+}
+
+:root {
+	--ui-text-dimmed: var(--ui-color-neutral-200);
+	--ui-text-muted: var(--ui-color-neutral-300);
+	--ui-text-toned: var(--ui-color-neutral-500);
+	--ui-text: var(--ui-color-neutral-100);
+	--ui-text-highlighted: var(--color-white);
+	--ui-text-inverted: var(--color-black);
+
+	--ui-bg: var(--color-slate-900);
+	--ui-bg-muted: var(--color-slate-950);
+	--ui-bg-elevated: var(--color-slate-800);
+	--ui-bg-accented: var(--color-slate-700);
+	--ui-bg-inverted: var(--color-slate-100);
+
+	--ui-border: var(--ui-color-neutral-200);
+	--ui-border-muted: var(--ui-color-neutral-200);
+	--ui-border-accented: var(--ui-color-neutral-300);
+	--ui-border-inverted: var(--ui-color-neutral-900);
+
+	--ui-primary: var(--color-sky-500);
+}
+
+
+@utility notch-* {
+	position: relative;
+
+	&::after
+	{
+		content: '';
+		position: absolute;
+		left: calc(var(--spacing) * -4 + 4px);
+		top: 0;
+		bottom: 0;
+
+		width: calc(var(--spacing) * 4);
+		background: var(--color-sky-700);
+		clip-path: polygon(100% calc(--value([percentage]) - 10%), 100% calc(--value([percentage]) + 10%), 0% calc(--value([percentage])));
+		clip-path: polygon(100% calc(--value(integer) * 1% - 10%), 100% calc(--value(integer) * 1% + 10%), 0% calc(--value(integer) * 1%));
+	}
+}
+@source inline('notch-{0..100..1}');
