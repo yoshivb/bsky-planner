@@ -1,3 +1,5 @@
+![The Bsky Planner Banner](https://repository-images.githubusercontent.com/1024859536/83d824ea-976f-475d-8fea-7257aac3c629)
+
 # The Bsky Planner
 
 Plan your Bluesky posts and reposts in advance, fully self-hosted & contained, and no extra TOS to deal with!
