@@ -133,8 +133,9 @@ const onTimestampClicked = (timestamp: Date) =>
 }
 </style>
 <template>
-	<div class="grid grid-cols-[auto_repeat(7,minmax(120px,_1fr))_auto] rounded">
-		<div class="sticky top-0 z-10 grid grid-cols-subgrid col-span-9 bg-accented"
+	<div class="grid rounded"
+		:style="`grid-template-columns: auto repeat(${daysDisplayed}, minmax(120px, 1fr)) auto`">
+		<div class="sticky top-0 z-10 grid grid-cols-subgrid col-span-full bg-accented"
 			:class="{
 				'after:bg-emerald-500 after:absolute after:h-[2px] after:bottom-0 after:animate-[elastic_1s_ease-in-out_infinite] rtl:after:animate-[elastic-rtl_1s_ease-in-out_infinite]': loading
 			}">
@@ -154,7 +155,7 @@ const onTimestampClicked = (timestamp: Date) =>
 				class="bg-accented rounded-l-none"
 				@click="nextPagination"/>
 		</div>
-		<div class="grid grid-cols-subgrid col-span-9 grid-rows-[repeat(96,_20px)] bg-muted">
+		<div class="grid grid-cols-subgrid grid-rows-[repeat(96,_20px)] bg-muted col-span-full">
 			<div class="grid grid-rows-subgrid row-span-96 mx-3 mt-2">
 				<div v-for="hourData in scheduleData[0]"
 					class="relative row-span-4">
@@ -168,18 +169,18 @@ const onTimestampClicked = (timestamp: Date) =>
 					</div>
 				</div>
 			</div>
-			<div class="grid grid-cols-subgrid grid-rows-subgrid col-span-7 row-span-96">
+			<div class="grid grid-cols-subgrid grid-rows-subgrid row-span-96 col-start-2 -col-end-2">
 				<div v-for="(day, i) of startOfEachDay" 
 					class="grid grid-rows-subgrid row-span-96">
 					<div v-for="hourData in scheduleData[i]"
-						class="border border-slate-700 relative grid row-span-4">
+						class="border border-slate-700 relative grid row-span-4 isolate">
 						<div v-if="isSameHour(currentTime, hourData.date)"
 							class="w-full h-[2px] bg-red-400 absolute z-20"
 							:style="{
 								top: `${(currentTime.getMinutes() / 60) * 100}%`
 							}" ref="currentTimeEl">
 						</div>
-						<UButton v-for="quarter in 4" variant="ghost" color="neutral" 
+						<UButton v-for="quarter in 4" variant="ghost" color="neutral" class="z-10"
 							@click="onTimestampClicked(addMinutes(hourData.date, 15.0 * (quarter-1)))"/>
 						<div v-if="selectedTime && hourData.isSelected"
 							class="w-full h-1/4 selectedTime absolute"
@@ -187,12 +188,15 @@ const onTimestampClicked = (timestamp: Date) =>
 								top: `${(selectedTime.getMinutes() / 60) * 100}%`
 							}">
 						</div>
-						<div v-if="scheduledData" v-for="item in hourData.scheduledData"
-							class="inset-y-0 inset-x-4 absolute"
-							:class="`notch-${Math.floor((item.scheduled_for.getMinutes() / 60) * 100)}`">
-							<slot 
-								name="item" :item="item" :currentTime="currentTime">
-							</slot>
+						<div v-if="hourData.scheduledData && hourData.scheduledData.length > 0"
+							class="inset-0 absolute grid grid-cols-2 grid-rows-1">
+							<div v-for="item in hourData.scheduledData"
+								class="ml-4 z-20"
+								:class="`notch-${Math.floor((item.scheduled_for.getMinutes() / 60) * 100)}`">
+								<slot 
+									name="item" :item="item" :currentTime="currentTime">
+								</slot>
+							</div>
 						</div>
 					</div>
 				</div>

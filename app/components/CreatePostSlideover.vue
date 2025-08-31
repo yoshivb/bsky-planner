@@ -26,6 +26,9 @@ const emit = defineEmits<{ 'update:timestamp': [Date], 'close': [boolean] }>();
     :side="props.side"
   >
     <template #body>
+      <div class="pb-2 flex justify-end w-full">
+        <UButton @click="emit('close', false)">Close</UButton>
+      </div>
       <UTabs :items="tabs" class="gap-4 w-full">
           <template #schedule_post="{ item }">
             <CreatePost :timestamp="timestamp" @update:timestamp="(date) => emit('update:timestamp', date)" @close="emit('close', true)"/>

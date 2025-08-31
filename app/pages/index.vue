@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	import { CreatePostSlideover } from '#components';
+	import { vResizeObserver } from '@vueuse/components'
 	import type { RepostType } from '~~/shared/utils/types';
 
 	definePageMeta({
@@ -10,7 +11,18 @@
 	const createPostSlideover = overlay.create(CreatePostSlideover);
 	const selectedTime = ref<Date|undefined>(undefined);
 	const startDate = ref(new Date(new Date().setHours(0,0,0,0)));
-	const daysDisplayed = ref(7);
+	const daysDisplayed = ref(3);
+
+	function onScheduleResized(entries : readonly ResizeObserverEntry[]) {
+		const [entry] = entries;
+		if(!entry)
+		{
+			return;
+		}
+		const { width, height } = entry.contentRect;
+		const days = Math.max(Math.min(Math.floor((width - 100) / 250), 7),1);
+		daysDisplayed.value = days;
+	}
 
 	const onSelectedTime = async (time: Date) => {
 		selectedTime.value = time;
@@ -163,9 +175,9 @@
 	}
 </script>
 <template>
-	<div>
+	<div class="max-h-screen grid grid-rows-[auto_minmax(100%,_800px)]">
 		<Navbar></Navbar>
-		<Schedule class="mx-5 max-h-[800px] overflow-y-auto" 
+		<Schedule v-resize-observer="onScheduleResized" class="mx-5 overflow-y-auto" 
 			@time-selected="onSelectedTime" 
 			:selected-time="selectedTime" :scheduled-data="posts_and_reposts"
 			v-model:start-date="startDate" v-model:days-displayed="daysDisplayed"
@@ -173,11 +185,11 @@
 			>
 			<template #item="{item, currentTime}">
 				<div class="h-full rounded bg-sky-700">
-					<div class="flex justify-between gap-2 p-2 text-xs h-full">
+					<div class="grid grid-cols-2 grid-rows-1 justify-between gap-2 p-2 text-xs h-full">
 						<p class="text-xs line-clamp-4 text-wrap wrap-anywhere">{{ item.content.text }}</p>
 						<div v-if="item.content.embed"
 							:class="[getImageGridStyle(item.content.embed.length).container]"
-							class="grid gap-1 min-w-fit">
+							class="grid gap-1 max-h-full">
 							<img v-for="embed in item.content.embed"
 								:src="embed.file" :alt="embed.alt"
 								:class="[getImageGridStyle(item.content.embed.length).image]"

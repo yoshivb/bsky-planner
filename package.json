@@ -19,6 +19,7 @@
     "@internationalized/date": "^3.8.2",
     "@nuxt/icon": "^1.15.0",
     "@nuxt/ui": "^3.3.0",
+    "@vueuse/components": "^13.8.0",
     "@vueuse/core": "^13.5.0",
     "chokidar": "^4.0.3",
     "datauri": "^4.1.0",
